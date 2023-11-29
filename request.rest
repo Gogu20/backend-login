@@ -1,0 +1,56 @@
+###Request users data for testing
+GET http://localhost:3000/users
+
+###Register an user
+POST http://localhost:3000/users
+Content-Type: application/json
+
+{
+    "email": "timi@email.com",
+    "password": "password"
+}
+
+###Register a second user
+POST http://localhost:3000/users
+Content-Type: application/json
+
+{
+    "email": "marcel1994@coolmail.it",
+    "password": "1234567890"
+}
+
+###Register an invalid email for testing
+POST http://localhost:3000/users
+Content-Type: application/json
+
+{
+    "email": "elena",
+    "password": "ParolaOriginala"
+}
+
+###Login timi
+POST http://localhost:3000/users/login
+Content-Type: application/json
+
+{
+    "email": "timi@email.com",
+    "password": "password"
+}
+
+###Login marcel
+POST http://localhost:3000/users/login
+Content-Type: application/json
+
+{
+    "email": "marcel1994@coolmail.it",
+    "password": "1234567890"
+}
+
+###Incorrect login
+POST http://localhost:3000/users/login
+Content-Type: application/json
+
+{
+    "email": "elena",
+    "password": "ParolaOriginala"
+}
