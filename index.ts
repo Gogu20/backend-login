@@ -14,6 +14,10 @@ app.get('/users', (req: Request, res: Response) => {
 
 app.post('/users', async (req: Request, res: Response) => {
     try {
+        const expression: RegExp = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,}$/i; 
+        if (!expression.test(req.body.email)) {
+            return res.status(400).send("Invalid email.");
+        }
         const dupeEmail = users.find(dupeEmail => dupeEmail.email == req.body.email);
         if(dupeEmail != null) {
             return res.status(400).send("Email already in use.")
