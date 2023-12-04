@@ -38,7 +38,7 @@ app.post('/users/login', async (req: Request, res: Response) => {
         return res.status(404).send("User does not exist.");
     }
     try {
-        if (bcrypt.compare(req.body.password, user.password)) {
+        if (await bcrypt.compare(req.body.password, user.password)) {
             res.send("Logged in successfully.");
         } else {
             res.status(401).send("Incorrect password.");
