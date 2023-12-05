@@ -2,13 +2,16 @@
   "compilerOptions": {
     "module": "commonjs",
     "esModuleInterop": true,
+    "strict": true,
     "target": "es6",
     "moduleResolution": "node",
     "sourceMap": true,
-    "outDir": "dist"
+    "outDir": "dist",
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "lib": [
+      "es2015",
+      "DOM"
+    ]
   },
-  "lib": [
-    "es2015",
-    "DOM"
-  ]
 }

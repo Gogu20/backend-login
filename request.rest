@@ -1,8 +1,8 @@
 ###Request users data for testing
-GET http://localhost:3000/users
+GET http://localhost:5500/users
 
 ###Register an user
-POST http://localhost:3000/users
+POST http://localhost:5500/users
 Content-Type: application/json
 
 {
@@ -11,7 +11,7 @@ Content-Type: application/json
 }
 
 ###Register a second user
-POST http://localhost:3000/users
+POST http://localhost:5500/users
 Content-Type: application/json
 
 {
@@ -19,8 +19,17 @@ Content-Type: application/json
     "password": "1234567890"
 }
 
-###Register an invalid email for testing
-POST http://localhost:3000/users
+###Register with no data for password
+POST http://localhost:5500/users
+Content-Type: application/json
+
+{
+    "email": "marcel1994@coolmail.it",
+    "password": ""
+}
+
+###Register an invalid email
+POST http://localhost:5500/users
 Content-Type: application/json
 
 {
@@ -29,7 +38,7 @@ Content-Type: application/json
 }
 
 ###Login timi
-POST http://localhost:3000/users/login
+POST http://localhost:5500/users/login
 Content-Type: application/json
 
 {
@@ -38,7 +47,7 @@ Content-Type: application/json
 }
 
 ###Login marcel
-POST http://localhost:3000/users/login
+POST http://localhost:5500/users/login
 Content-Type: application/json
 
 {
@@ -46,11 +55,11 @@ Content-Type: application/json
     "password": "1234567890"
 }
 
-###Incorrect login
-POST http://localhost:3000/users/login
+###Incorrect password login
+POST http://localhost:5500/users/login
 Content-Type: application/json
 
 {
-    "email": "elena",
-    "password": "ParolaOriginala"
+    "email": "timi@email.com",
+    "password": "pass"
 }
