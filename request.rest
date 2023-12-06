@@ -19,7 +19,7 @@ Content-Type: application/json
     "password": "1234567890"
 }
 
-###Register with no data for password
+###Register with no entry for password
 POST http://localhost:5500/users
 Content-Type: application/json
 
