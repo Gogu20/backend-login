@@ -1,8 +1,10 @@
-import { users } from '../utils/users'
 import { Express, Request, Response } from 'express';
-import { loginValidation, registerValidation } from '../utils/validation-utils';
-import { register } from '../utils/register';
+
 import { login } from '../utils/login';
+import { register } from '../utils/register';
+import { users } from '../utils/users';
+import { loginValidation, registerValidation } from '../utils/validation-utils';
+
 const express = require('express');
 const app: Express = express();
 require('dotenv').config();
