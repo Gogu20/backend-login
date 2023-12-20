@@ -1,22 +1,12 @@
 import { User } from './interfaces'
 
 export class UserData { 
-    public currentUser: User = { email: "", password: "" };    
-    public users: User[] = [];
-    
-    //Getters
-    public get email() {
-        return this.currentUser.email;
-    }
-    public get password() {
-        return this.currentUser.password;
-    }
+    private usersArray: User[] = [];
 
-    //Setters
-    public set email(email: string) {
-        this.currentUser.email = email;
+    public get users(): User[] {
+        return this.usersArray;
     }
-    public set password(password) {
-        this.currentUser.password = password;
+    public addUser(user: User) {
+        this.usersArray.push(user);
     }
 }

@@ -1,6 +1,6 @@
 import { Express, Request, Response } from 'express';
+import { User } from '../resources/interfaces';
 import { UserValidation } from '../resources/UserValidation';
-import { UserData } from '../resources/UserData';
 import { UserActions } from '../resources/UserActions';
 
 const express = require('express');
@@ -9,13 +9,13 @@ require('dotenv').config();
 
 app.use(express.json());
 
-const user = new UserData;
+const users: User[] = [];
 const userActions = new UserActions;
 const userValidation = new UserValidation;
 
 //request users data for testing
 app.get('/users', (req: Request, res: Response) => {
-    res.json(user.users);
+    res.json(users);
 })
 
 app.post('/users', async (req: Request, res: Response) => {
@@ -24,7 +24,6 @@ app.post('/users', async (req: Request, res: Response) => {
         return res.status(400).send(error);
     }
     try {
-        currentUser.password = await userActions.hashPassword(currentUser.password)
         userActions.register(currentUser);
         return res.status(201).send("User created successfully.");
     } catch {
