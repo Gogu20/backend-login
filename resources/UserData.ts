@@ -1,22 +1,22 @@
+import { User } from './interfaces'
 
 export class UserData { 
-    private _email: string = "";
-    private _password: string = "";
-    public users: {email: string, password: string} [] = [];
+    public currentUser: User = { email: "", password: "" };    
+    public users: User[] = [];
     
     //Getters
     public get email() {
-        return this._email;
+        return this.currentUser.email;
     }
     public get password() {
-        return this._password;
+        return this.currentUser.password;
     }
 
-    //setters
-    public set email(email) {
-        this._email = email;
+    //Setters
+    public set email(email: string) {
+        this.currentUser.email = email;
     }
     public set password(password) {
-        this._password = password;
+        this.currentUser.password = password;
     }
 }

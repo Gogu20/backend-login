@@ -1,6 +1,7 @@
-import { UserActions } from "./UserActions";
+import { User } from './interfaces'
+import { UserData } from "./UserData";
 
-export class UserValidation extends UserActions{
+export class UserValidation extends UserData{
     private isEmptyField(email: string, password: string): boolean{
         if (email == "" || password == "") {
             return true;
@@ -16,35 +17,36 @@ export class UserValidation extends UserActions{
         return false;
     }
 
+    private getUserByEmail(email: string) {
+        const currentUser = this.users.find(users => users.email == email);
+        return currentUser;
+    }
+
     public registerValidation(email: string, password: string) {
-        let error: string = "";
+        let currentUser: User | undefined = this.getUserByEmail(email);
         if (this.isEmptyField(email, password)) {
-            error = "Empty field.";
-            return error;
+            return { error: "Empty field.", currentUser: currentUser };
         }
         if (this.isInvalidEmail(email)) {
-            error = "Invalid email.";
-            return error;
+            return { error: "Invalid email.", currentUser: currentUser };
         }
-        const emailAlreadyExists = this.findUserByEmail(email) != undefined;
+        const emailAlreadyExists = currentUser !== undefined;
         if (emailAlreadyExists) {
-            error = "Email already in use.";
-            return error;
+            return { error: "Email already in use.", currentUser: currentUser };
         }
-        return error;
+        return { error: "", currentUser: currentUser };
     }
 
     public loginValidation(email: string, password: string) {
-        let error: string = "";
+        let currentUser: User | undefined = this.getUserByEmail(email);
         if (this.isEmptyField(email, password)) {
-            error = "Empty field.";
-            return error;
+            return { error: "Empty field.", currentUser: currentUser };
         }
-        const emailAlreadyExists = this.findUserByEmail(email) == undefined;
-        if (emailAlreadyExists) {
-            error = "User does not exist.";
-            return error;
+        const userDoesNotExist = currentUser === undefined;
+        if (userDoesNotExist) {
+            return { error: "User does not exist.", currentUser: currentUser };
+
         }
-        return error;
+        return { error: "", currentUser: currentUser };
     }
 }
