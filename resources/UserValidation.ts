@@ -1,8 +1,9 @@
 import { User } from './interfaces'
 import { UserData } from "./UserData";
 
-export class UserValidation extends UserData{
-    private isEmptyField(email: string, password: string): boolean{
+export class UserValidation {
+
+    private isEmptyField(email: string, password: string): boolean {
         if (email == "" || password == "") {
             return true;
         }
@@ -17,36 +18,20 @@ export class UserValidation extends UserData{
         return false;
     }
 
-    private getUserByEmail(email: string) {
-        const currentUser = this.users.find(users => users.email == email);
-        return currentUser;
-    }
-
     public registerValidation(email: string, password: string) {
-        let currentUser: User | undefined = this.getUserByEmail(email);
         if (this.isEmptyField(email, password)) {
-            return { error: "Empty field.", currentUser: currentUser };
+            return "Empty field.";
         }
         if (this.isInvalidEmail(email)) {
-            return { error: "Invalid email.", currentUser: currentUser };
+            return "Invalid email."
         }
-        const emailAlreadyExists = currentUser !== undefined;
-        if (emailAlreadyExists) {
-            return { error: "Email already in use.", currentUser: currentUser };
-        }
-        return { error: "", currentUser: currentUser };
+        return "";
     }
 
     public loginValidation(email: string, password: string) {
-        let currentUser: User | undefined = this.getUserByEmail(email);
         if (this.isEmptyField(email, password)) {
-            return { error: "Empty field.", currentUser: currentUser };
+            return "Empty field.";
         }
-        const userDoesNotExist = currentUser === undefined;
-        if (userDoesNotExist) {
-            return { error: "User does not exist.", currentUser: currentUser };
-
-        }
-        return { error: "", currentUser: currentUser };
+        return "";
     }
 }
