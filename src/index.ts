@@ -1,7 +1,6 @@
 import { Express, Request, Response } from 'express';
 import { UserValidation } from '../resources/UserValidation';
 import { UserActions } from '../resources/UserActions';
-import { User } from '../resources/interfaces';
 import { UserData } from '../resources/UserData';
 
 const express = require('express');
