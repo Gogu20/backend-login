@@ -1,2 +1,3 @@
 I used the "REST Client" VS Code extension for testing, so i also included my request.rest file for really quick requests.
 If you want to test it another way just ignore that file.
+For register confirmation emails rename .env-template to just .env and fill in EMAIL_SERVICE (e.g. Outlook, Gmail, etc.), ORG_EMAIL, which is the email used to send the confirmations, and ORG_PASSWORD with the password for that email.
