@@ -1,9 +1,10 @@
+import { Transporter, SentMessageInfo } from "nodemailer";
 const nodemailer = require('nodemailer');
 require('dotenv').config();
 
 export class UserConfirmation {
    
-    private transporter: any;
+    private transporter: Transporter;
     
     constructor() {
         this.transporter = nodemailer.createTransport({
@@ -24,7 +25,7 @@ export class UserConfirmation {
             text: 'Congratulations! You have successfully registered.'
         };
 
-        this.transporter.sendMail(mailOptions, function (error: any, info: any) {
+        this.transporter.sendMail(mailOptions, function (error: Error | null, info: SentMessageInfo) {
             if (error) {
                 console.error('Error sending email:', error);
                 return;
