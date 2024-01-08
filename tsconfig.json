@@ -10,7 +10,6 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "lib": [
-      "es2015",
       "DOM"
     ]
   },
