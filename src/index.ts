@@ -2,6 +2,7 @@ import { Express, Request, Response } from 'express';
 import { UserValidation } from '../resources/UserValidation';
 import { UserActions } from '../resources/UserActions';
 import { UserData } from '../resources/UserData';
+import { User } from '../resources/interfaces'
 
 const express = require('express');
 const app: Express = express();
@@ -19,8 +20,8 @@ app.get('/users', (req: Request, res: Response) => {
 })
 
 app.post('/users/register', async (req: Request, res: Response) => {
-    const error = userValidation.registerValidation(req.body.email, req.body.password);
-    const thereIsError = error != "";
+    const error: string = userValidation.registerValidation(req.body.email, req.body.password);
+    const thereIsError: boolean = error != "";
     if (thereIsError) {
         return res.status(400).send(error);
     }
@@ -33,13 +34,14 @@ app.post('/users/register', async (req: Request, res: Response) => {
 })
 
 app.post('/users/login', async (req: Request, res: Response) => {
-    const { error, currentUser } = userValidation.loginValidation(req.body.email, req.body.password);
-    const thereIsError = !currentUser;
+    const user: User = userData.getUserByEmail(req.body.email);
+    const error: string = userValidation.loginValidation(req.body.email, req.body.password);
+    const thereIsError: boolean = error != "";
     if (thereIsError) {
         return res.status(400).send(error);
     }
     try {
-        if (await userActions.login(currentUser, req.body.password)) {
+        if (await userActions.login(user, req.body.password)) {
             return res.send("Logged in successfully.");
         }
         return res.status(401).send("Incorrect password.");
