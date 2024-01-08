@@ -12,13 +12,13 @@ export class UserActions {
         this.userData = userData;
     }
 
-    public async register(user: User) {
+    public async register(user: User): Promise<void> {
         user.password = await this.userData.hashPassword(user.password);
         this.userData.addUser(user);
         this.userConfirmation.sendRegistrationEmail(user.email);
     }
 
-    public async login (user: User, password: string) {
+    public async login (user: User, password: string): Promise<boolean> {
         return await bcrypt.compare(password, user.password)
     }
 }

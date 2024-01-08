@@ -25,7 +25,7 @@ Content-Type: application/json
 
 {
     "email": "tmierlut@gmail.com",
-    "password": "0InteresDat"
+    "password": "ok"
 }
 
 ###Register with no entry for password

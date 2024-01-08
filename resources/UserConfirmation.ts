@@ -16,8 +16,8 @@ export class UserConfirmation {
         });
     }
 
-    public sendRegistrationEmail(email: string) {
-
+    public sendRegistrationEmail(email: string): void {
+        
         const mailOptions = {
             from: process.env.ORG_EMAIL,
             to: email,
@@ -25,12 +25,12 @@ export class UserConfirmation {
             text: 'Congratulations! You have successfully registered.'
         };
 
-        this.transporter.sendMail(mailOptions, function (error: Error | null, info: SentMessageInfo) {
+        this.transporter.sendMail(mailOptions, (error: Error | null, info: SentMessageInfo) => {
             if (error) {
                 console.error('Error sending email:', error);
                 return;
             }
-            console.log('Email sent: ' + info.response);
+            console.log('Email sent:', info.response);
         });
     }
 }
