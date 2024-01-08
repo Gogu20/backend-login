@@ -18,6 +18,11 @@ export class UserValidation {
         return !expression.test(email);
     }
 
+    private isInvalidPassword(password: string): boolean {
+        const expression: RegExp = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+        return !expression.test(password);
+    }
+
     private isExistingUser(email: string): boolean {
         const currentUser: User = this.userData.getUserByEmail(email);
         return currentUser.email !== "" && currentUser.password !== "";
@@ -30,7 +35,10 @@ export class UserValidation {
         if (this.isInvalidEmail(email)) {
             return "Invalid email.";
         }
-        const emailAlreadyExists: boolean = this.isExistingUser(email) as boolean; //is this what you mean by response types?
+        if (this.isInvalidPassword(password)) {
+            return "Password must contain at least 8 characters and at least one letter and one number.";
+        }
+        const emailAlreadyExists: boolean = this.isExistingUser(email);
         if (emailAlreadyExists) {
             return "Email already in use.";
         }
