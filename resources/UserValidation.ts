@@ -1,57 +1,45 @@
-import { User } from './interfaces'
-import { UserData } from "./UserData";
+import { UserInput } from './interfaces'
 
 export class UserValidation {
 
-    private userData: UserData;
-
-    constructor(userData: UserData) {
-        this.userData = userData;
-    }
-
-    private isEmptyField(email: string, password: string): boolean {
-        return email == "" || password == "";
+    private getFirstEmptyField(fields: UserInput): string | undefined {
+        for (const key in fields) {
+            const isEmpty = !fields[key].trim();
+            if (isEmpty) {
+                return key;
+            }
+        }
+        return undefined;
     }
     
     private isInvalidEmail(email: string): boolean {
-        const expression: RegExp = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,}$/i; 
-        return !expression.test(email);
+        const emailRegex: RegExp = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,}$/i; 
+        return !emailRegex.test(email);
     }
 
     private isInvalidPassword(password: string): boolean {
-        const expression: RegExp = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
-        return !expression.test(password);
+        const passwordRegex: RegExp = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+        return !passwordRegex.test(password);
     }
 
-    private isExistingUser(email: string): boolean {
-        const currentUser: User = this.userData.getUserByEmail(email);
-        return currentUser.email !== "" && currentUser.password !== "";
-    }
-
-    public registerValidation(email: string, password: string): string {
-        if (this.isEmptyField(email, password)) {
-            return "Empty field.";
+    public registerValidation(userInput: UserInput): string {
+        const emptyField = this.getFirstEmptyField(userInput);
+        if (emptyField) {
+            return `${emptyField} field empty.`;
         }
-        if (this.isInvalidEmail(email)) {
+        if (this.isInvalidEmail(userInput.email)) {
             return "Invalid email.";
         }
-        if (this.isInvalidPassword(password)) {
+        if (this.isInvalidPassword(userInput.password)) {
             return "Password must contain at least 8 characters and at least one letter and one number.";
-        }
-        const emailAlreadyExists: boolean = this.isExistingUser(email);
-        if (emailAlreadyExists) {
-            return "Email already in use.";
         }
         return "";
     }
 
-    public loginValidation(email: string, password: string): string {
-        if (this.isEmptyField(email, password)) {
-            return "Empty field.";
-        }
-        const userDoesNotExist: boolean = !this.isExistingUser(email);
-        if (userDoesNotExist) {
-            return "User does not exist.";
+    public loginValidation(userInput: UserInput): string {
+        const emptyField = this.getFirstEmptyField(userInput);
+        if (emptyField) {
+            return `${emptyField} field empty.`;
         }
         return "";
     }

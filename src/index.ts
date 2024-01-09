@@ -2,7 +2,7 @@ import { Express, Request, Response } from 'express';
 import { UserValidation } from '../resources/UserValidation';
 import { UserActions } from '../resources/UserActions';
 import { UserData } from '../resources/UserData';
-import { User } from '../resources/interfaces'
+import { User, UserInput } from '../resources/interfaces'
 
 const express = require('express');
 const app: Express = express();
@@ -12,7 +12,7 @@ app.use(express.json());
 
 const userData = new UserData;
 const userActions = new UserActions(userData);
-const userValidation = new UserValidation(userData);
+const userValidation = new UserValidation();
 
 //request users data for testing
 app.get('/users', (req: Request, res: Response) => {
@@ -20,13 +20,28 @@ app.get('/users', (req: Request, res: Response) => {
 })
 
 app.post('/users/register', async (req: Request, res: Response) => {
-    const error: string = userValidation.registerValidation(req.body.email, req.body.password);
-    const thereIsError: boolean = error != "";
-    if (thereIsError) {
-        return res.status(400).send(error);
+    const userInputData: UserInput = {
+        email: req.body.email,
+        password: req.body.password
     }
+    const currentUser: User | undefined = userData.getUserByEmail(userInputData.email);
+    const userAlreadyExists = currentUser !== undefined;
+    if (userAlreadyExists) {
+        return res.status(409).send("Email already in use.");
+    }
+
+    const validationError: string = userValidation.registerValidation(userInputData);
+    const thereIsError: boolean = validationError != "";
+    if (thereIsError) {
+        return res.status(400).send(validationError);
+    }
+
     try {
-        userActions.register({email: req.body.email, password: req.body.password});
+        userActions.register({
+            id: Date.now(),
+            email: userInputData.email,
+            password: userInputData.password,
+        });
         return res.status(201).send("User created successfully.");
     } catch {
         res.status(500).send();
@@ -34,14 +49,23 @@ app.post('/users/register', async (req: Request, res: Response) => {
 })
 
 app.post('/users/login', async (req: Request, res: Response) => {
-    const user: User = userData.getUserByEmail(req.body.email);
-    const error: string = userValidation.loginValidation(req.body.email, req.body.password);
-    const thereIsError: boolean = error != "";
-    if (thereIsError) {
-        return res.status(400).send(error);
+    const userInputData: UserInput = {
+        email: req.body.email,
+        password: req.body.password
     }
+    const validationError: string = userValidation.loginValidation(userInputData);
+    const thereIsError: boolean = validationError != "";
+    if (thereIsError) {
+        return res.status(400).send(validationError);
+    }
+    const currentUser: User | undefined = userData.getUserByEmail(userInputData.email);
+    const userAlreadyExists = currentUser === undefined;
+    if (userAlreadyExists) {
+        return res.status(404).send("User does not exist.");
+    }
+
     try {
-        if (await userActions.login(user, req.body.password)) {
+        if (await userActions.login(currentUser, userInputData.password)) {
             return res.send("Logged in successfully.");
         }
         return res.status(401).send("Incorrect password.");

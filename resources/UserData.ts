@@ -23,12 +23,8 @@ export class UserData {
         return password;
     }
 
-    public getUserByEmail(email: string): User {
+    public getUserByEmail(email: string): User | undefined {
         const currentUser: User | undefined = this.usersArray.find(usersArray => usersArray.email == email);
-        if (currentUser == undefined) {
-            return {email: "", password: ""};
-        }
-        const user: User = currentUser
-        return user;
+        return currentUser;
     }
 }
