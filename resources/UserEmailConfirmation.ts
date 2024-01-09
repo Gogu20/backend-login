@@ -1,7 +1,7 @@
 import { Transporter, SentMessageInfo } from "nodemailer";
 require('dotenv').config();
 
-export class UserConfirmation {
+export class UserEmailConfirmation {
    
     private transporter: Transporter;
     
