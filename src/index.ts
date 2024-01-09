@@ -66,7 +66,7 @@ app.post('/users/login', async (req: Request, res: Response) => {
 
     try {
         if (await userActions.login(currentUser, userInputData.password)) {
-            return res.send("Logged in successfully.");
+            return res.status(200).send("Logged in successfully.");
         }
         return res.status(401).send("Incorrect password.");
     } catch {

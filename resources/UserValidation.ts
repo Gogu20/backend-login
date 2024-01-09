@@ -1,7 +1,7 @@
 import { UserInput } from './interfaces'
 
 export class UserValidation {
-
+    
     private getFirstEmptyField(fields: UserInput): string | undefined {
         for (const key in fields) {
             const isEmpty = !fields[key].trim();

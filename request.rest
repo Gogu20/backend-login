@@ -25,7 +25,7 @@ Content-Type: application/json
 
 {
     "email": "tmierlut@gmail.com",
-    "password": "ok"
+    "password": "manancmere15"
 }
 
 ###Register with no entry for password
@@ -34,7 +34,7 @@ Content-Type: application/json
 
 {
     "email": "marcel1994@coolmail.it",
-    "password": ""
+    "password": "cool1234567890"
 }
 
 ###Register an invalid email

@@ -1,11 +1,14 @@
 import { User } from './interfaces'
+import { TransporterConfig } from './TransporterConfig';
 import { UserConfirmation } from './UserConfirmation';
 import { UserData } from './UserData';
 const bcrypt = require('bcrypt');
 
 export class UserActions {
-    
-    private userConfirmation = new UserConfirmation;
+
+    private transporterConfig = new TransporterConfig;
+    private userConfirmation = new UserConfirmation(this.transporterConfig.transporter);
+
     private userData: UserData;
 
     constructor(userData: UserData) {

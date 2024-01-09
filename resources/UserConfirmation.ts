@@ -1,21 +1,14 @@
 import { Transporter, SentMessageInfo } from "nodemailer";
-const nodemailer = require('nodemailer');
 require('dotenv').config();
 
 export class UserConfirmation {
    
     private transporter: Transporter;
     
-    constructor() {
-        this.transporter = nodemailer.createTransport({
-            service: process.env.EMAIL_SERVICE,
-            auth: {
-                user: process.env.ORG_EMAIL,
-                pass: process.env.ORG_PASSWORD
-            }
-        });
+    constructor(transporter: Transporter) {
+        this.transporter = transporter
     }
-
+    
     public sendRegistrationEmail(email: string): void {
         
         const mailOptions = {
