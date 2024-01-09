@@ -1,11 +1,12 @@
 import { User } from './interfaces'
+import { UserData } from './UserData';
+import { HashingUtilities } from './HashingUtilities';
 import { TransporterConfig } from './TransporterConfig';
 import { UserEmailConfirmation } from './UserEmailConfirmation';
-import { UserData } from './UserData';
-const bcrypt = require('bcrypt');
 
 export class UserActions {
 
+    private hashingUtils = new HashingUtilities;
     private transporterConfig = new TransporterConfig;
     private userConfirmation = new UserEmailConfirmation(this.transporterConfig.transporter);
 
@@ -16,12 +17,12 @@ export class UserActions {
     }
 
     public async register(user: User): Promise<void> {
-        user.password = await this.userData.hashPassword(user.password);
+        user.password = await this.hashingUtils.generateHash(user.password);
         this.userData.addUser(user);
         this.userConfirmation.sendRegistrationEmail(user.email);
     }
 
     public async login (user: User, password: string): Promise<boolean> {
-        return await bcrypt.compare(password, user.password)
+        return await this.hashingUtils.compareDataWithHash(password, user.password)
     }
 }

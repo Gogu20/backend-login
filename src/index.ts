@@ -1,8 +1,8 @@
 import { Express, Request, Response } from 'express';
+import { User, UserInput } from '../resources/interfaces'
 import { UserValidation } from '../resources/UserValidation';
 import { UserActions } from '../resources/UserActions';
 import { UserData } from '../resources/UserData';
-import { User, UserInput } from '../resources/interfaces'
 
 const express = require('express');
 const app: Express = express();
