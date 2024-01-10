@@ -1,7 +1,7 @@
 import { capitalizeFirstLetter, processArrayIntoString } from './generalUtils';
-import { UserInput, ValidationResult } from './sharedTypes'
+import { IUserValidation, UserInput, ValidationResult } from './sharedTypes'
 
-export class UserValidation {
+export class UserValidation implements IUserValidation {
 
     private getEmptyFields(fields: UserInput): (keyof UserInput)[] {
         const emptyFields: (keyof UserInput)[] = [];
@@ -11,7 +11,6 @@ export class UserValidation {
                 emptyFields.push(key as keyof UserInput);
             }
         }
-        console.log(emptyFields)
         return emptyFields;
     }
     
@@ -69,7 +68,6 @@ export class UserValidation {
         if (passwordFieldNotEmpty && this.isInvalidPassword(userInput.password)) {
             errors.push("Password must contain at least 8 characters and at least one letter and one number.");
         }
-
         if (errors.length > 0) {
             return {
                 success: false,

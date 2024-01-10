@@ -1,6 +1,6 @@
-import { User } from './sharedTypes';
+import { IUserData, User } from './sharedTypes';
 
-export class UserData {
+export class UserData implements IUserData{
     
     public usersArray: User[] = [];
 

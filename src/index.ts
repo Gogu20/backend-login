@@ -35,8 +35,7 @@ app.post('/users/register', async (req: Request, res: Response) => {
 
     const validationResults: ValidationResult = userValidation.registerValidation(userInputData);
     const thereIsError: boolean = !validationResults.success;
-    const validationErrors = bundleErrorsFromArray(validationResults.errors!)
-    console.log(validationErrors)
+    const validationErrors = bundleErrorsFromArray(validationResults.errors as string[])
     if (thereIsError) {
         return res.status(400).send(validationErrors);
     }
