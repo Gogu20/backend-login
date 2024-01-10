@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt');
 require('dotenv').config();
 
 
-export class HashingUtilities {
+export class HashingUtils {
 
     private saltRounds: number = this.getSaltFromEnv();
     

@@ -34,7 +34,7 @@ Content-Type: application/json
 
 {
     "email": "marcel1994@coolmail.it",
-    "password": "cool1234567890"
+    "password": ""
 }
 
 ###Register an invalid email

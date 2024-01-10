@@ -1,4 +1,4 @@
-import { User } from './interfaces';
+import { User } from './sharedTypes';
 
 export class UserData {
     

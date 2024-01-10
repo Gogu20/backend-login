@@ -1,8 +1,11 @@
 import { Express, Request, Response } from 'express';
-import { User, UserInput } from '../resources/interfaces'
+import { User, UserInput, ValidationResult } from '../resources/sharedTypes'
+import { isUser } from '../resources/typeUtils';
 import { UserValidation } from '../resources/UserValidation';
 import { UserActions } from '../resources/UserActions';
 import { UserData } from '../resources/UserData';
+import { bundleErrorsFromArray } from '../resources/generalUtils';
+
 
 const express = require('express');
 const app: Express = express();
@@ -25,15 +28,17 @@ app.post('/users/register', async (req: Request, res: Response) => {
         password: req.body.password
     }
     const currentUser: User | undefined = userData.getUserByEmail(userInputData.email);
-    const userAlreadyExists = currentUser !== undefined;
+    const userAlreadyExists = isUser(currentUser);
     if (userAlreadyExists) {
         return res.status(409).send("Email already in use.");
     }
 
-    const validationError: string = userValidation.registerValidation(userInputData);
-    const thereIsError: boolean = validationError != "";
+    const validationResults: ValidationResult = userValidation.registerValidation(userInputData);
+    const thereIsError: boolean = !validationResults.success;
+    const validationErrors = bundleErrorsFromArray(validationResults.errors!)
+    console.log(validationErrors)
     if (thereIsError) {
-        return res.status(400).send(validationError);
+        return res.status(400).send(validationErrors);
     }
 
     try {
@@ -53,14 +58,14 @@ app.post('/users/login', async (req: Request, res: Response) => {
         email: req.body.email,
         password: req.body.password
     }
-    const validationError: string = userValidation.loginValidation(userInputData);
-    const thereIsError: boolean = validationError != "";
+    const validationResults: ValidationResult = userValidation.loginValidation(userInputData);
+    const thereIsError: boolean = !validationResults.success;
     if (thereIsError) {
-        return res.status(400).send(validationError);
+        return res.status(400).send(validationResults.errors);
     }
     const currentUser: User | undefined = userData.getUserByEmail(userInputData.email);
-    const userAlreadyExists = currentUser === undefined;
-    if (userAlreadyExists) {
+    const userDoesNotExists = !isUser(currentUser);
+    if (userDoesNotExists) {
         return res.status(404).send("User does not exist.");
     }
 

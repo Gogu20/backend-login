@@ -1,12 +1,12 @@
-import { User } from './interfaces'
+import { User } from './sharedTypes'
 import { UserData } from './UserData';
-import { HashingUtilities } from './HashingUtilities';
+import { HashingUtils } from './HashingUtils';
 import { TransporterConfig } from './TransporterConfig';
 import { UserEmailConfirmation } from './UserEmailConfirmation';
 
 export class UserActions {
 
-    private hashingUtils = new HashingUtilities;
+    private hashingUtils = new HashingUtils;
     private transporterConfig = new TransporterConfig;
     private userConfirmation = new UserEmailConfirmation(this.transporterConfig.transporter);
 
