@@ -7,7 +7,7 @@ Content-Type: application/json
 
 {
     "email": "timi@email.com",
-    "password": "password"
+    "password": "password15"
 }
 
 ###Register a second user
@@ -16,7 +16,16 @@ Content-Type: application/json
 
 {
     "email": "marcel1994@coolmail.it",
-    "password": "1234567890"
+    "password": "cool1234567890"
+}
+
+###Register real email to test confirmation
+POST http://localhost:5500/users/register
+Content-Type: application/json
+
+{
+    "email": "tmierlut@gmail.com",
+    "password": "manancmere15"
 }
 
 ###Register with no entry for password
@@ -43,7 +52,7 @@ Content-Type: application/json
 
 {
     "email": "timi@email.com",
-    "password": "password"
+    "password": "password15"
 }
 
 ###Login marcel
@@ -52,7 +61,7 @@ Content-Type: application/json
 
 {
     "email": "marcel1994@coolmail.it",
-    "password": "1234567890"
+    "password": "cool1234567890"
 }
 
 ###Incorrect password login
