@@ -1,4 +1,4 @@
-import { IUserData, User } from './sharedTypes';
+import { IUserData, User } from '../sharedTypes';
 
 export class UserData implements IUserData{
     
@@ -8,7 +8,7 @@ export class UserData implements IUserData{
         return this.usersArray;
     }
 
-    public addUser(user: User): void {
+    public async addUser(user: User): Promise<void> {
         this.usersArray.push(user);
     }
 

@@ -1,6 +1,6 @@
-import { IUserActions, IUserData, User } from './sharedTypes'
-import { HashingUtils } from './HashingUtils';
-import { TransporterConfig } from './TransporterConfig';
+import { IUserActions, IUserData, User } from '../sharedTypes'
+import { HashingUtils } from '../utils/HashingUtils';
+import { TransporterConfig } from '../config/TransporterConfig';
 import { UserEmailConfirmation } from './UserEmailConfirmation';
 
 export class UserActions implements IUserActions{
@@ -11,8 +11,8 @@ export class UserActions implements IUserActions{
     }
 
     private hashingUtils = new HashingUtils;
-    private transporterConfig = new TransporterConfig;
-    private userConfirmation = new UserEmailConfirmation(this.transporterConfig.transporter);   
+    private transporterInstance = new TransporterConfig;
+    private userConfirmation = new UserEmailConfirmation(this.transporterInstance.transporter);   
 
     public async register(user: User): Promise<void> {
         user.password = await this.hashingUtils.generateHash(user.password);

@@ -1,7 +1,9 @@
-import { capitalizeFirstLetter, processArrayIntoString } from './generalUtils';
-import { IUserValidation, UserInput, ValidationResult } from './sharedTypes'
+import { GeneralUtils } from '../utils/GeneralUtils';
+import { IUserValidation, UserInput, ValidationResult } from '../sharedTypes'
 
 export class UserValidation implements IUserValidation {
+
+    private utils = new GeneralUtils;
 
     private getEmptyFields(fields: UserInput): (keyof UserInput)[] {
         const emptyFields: (keyof UserInput)[] = [];
@@ -48,7 +50,7 @@ export class UserValidation implements IUserValidation {
         const emptyFields: string[] = this.getEmptyFields(userInput);
         
         if (this.thereAreEmptyFields(userInput)) {
-            const emptyFieldsString: string = capitalizeFirstLetter(processArrayIntoString(emptyFields))
+            const emptyFieldsString: string = this.utils.capitalizeFirstLetter(this.utils.processArrayIntoString(emptyFields))
             errors.push(`${emptyFieldsString} field/s cannot be empty.`);
         }
         
@@ -81,7 +83,7 @@ export class UserValidation implements IUserValidation {
         const errors: string[] = []
         
         if (this.thereAreEmptyFields(userInput)) {
-            const emptyFields: string = capitalizeFirstLetter(processArrayIntoString(this.getEmptyFields(userInput)));
+            const emptyFields: string = this.utils.capitalizeFirstLetter(this.utils.processArrayIntoString(this.getEmptyFields(userInput)));
             errors.push(`${emptyFields} field/s cannot be empty.`);
         }
 
