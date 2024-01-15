@@ -1,5 +1,5 @@
 import { IUserValidation, UserInput, ValidationResult } from '../sharedTypes'
-const utils = require('../utils/generalUtils')
+import { capitalizeFirstLetter, processArrayIntoString} from '../utils/generalUtils'
 
 export class UserValidation implements IUserValidation {
 
@@ -48,7 +48,7 @@ export class UserValidation implements IUserValidation {
         const emptyFields: string[] = this.getEmptyFields(userInput);
         
         if (this.thereAreEmptyFields(userInput)) {
-            const emptyFieldsString: string = utils.capitalizeFirstLetter(utils.processArrayIntoString(emptyFields))
+            const emptyFieldsString: string = capitalizeFirstLetter(processArrayIntoString(emptyFields))
             errors.push(`${emptyFieldsString} field/s cannot be empty.`);
         }
         
@@ -81,7 +81,7 @@ export class UserValidation implements IUserValidation {
         const errors: string[] = []
         
         if (this.thereAreEmptyFields(userInput)) {
-            const emptyFields: string = utils.capitalizeFirstLetter(utils.processArrayIntoString(this.getEmptyFields(userInput)));
+            const emptyFields: string = capitalizeFirstLetter(processArrayIntoString(this.getEmptyFields(userInput)));
             errors.push(`${emptyFields} field/s cannot be empty.`);
         }
 

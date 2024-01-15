@@ -1,10 +1,10 @@
 import { Express, Request, Response } from 'express';
 import { User, UserInput, ValidationResult } from './sharedTypes'
+import { bundleErrorsFromArray } from './utils/generalUtils'
 import { UserValidation } from './user/UserValidation';
 import { UserActions } from './user/UserActions';
 import { UserData } from './user/UserData';
 
-const utils = require('./utils/generalUtils')
 const express = require('express');
 const app: Express = express();
 require('dotenv').config();
@@ -31,7 +31,7 @@ app.post('/users/register', async (req: Request, res: Response) => {
     }
 
     const validationResults: ValidationResult = userValidation.registerValidation(userInputData);
-    const validationErrors: string | undefined = utils.bundleErrorsFromArray(validationResults.errors)
+    const validationErrors: string | undefined = bundleErrorsFromArray(validationResults.errors)
     const thereIsError: boolean = !validationResults.success;
     if (thereIsError) {
         return res.status(400).send(validationErrors);
@@ -55,7 +55,7 @@ app.post('/users/login', async (req: Request, res: Response) => {
         password: req.body.password
     }
     const validationResults: ValidationResult = userValidation.loginValidation(userInputData);
-    const validationErrors: string | undefined = utils.bundleErrorsFromArray(validationResults.errors)
+    const validationErrors: string | undefined = bundleErrorsFromArray(validationResults.errors)
     const thereIsError: boolean = !validationResults.success;
     if (thereIsError) {
         return res.status(400).send(validationErrors);
