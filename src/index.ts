@@ -1,6 +1,5 @@
 import { Express, Request, Response } from 'express';
 import { User, UserInput, ValidationResult } from './sharedTypes'
-import { isUser } from './utils/typeUtils';
 import { UserValidation } from './user/UserValidation';
 import { UserActions } from './user/UserActions';
 import { UserData } from './user/UserData';
@@ -26,8 +25,7 @@ app.post('/users/register', async (req: Request, res: Response) => {
         email: req.body.email,
         password: req.body.password
     }
-    const currentUser: User | undefined = userData.getUserByEmail(userInputData.email);
-    const userAlreadyExists = isUser(currentUser);
+    const userAlreadyExists: User | undefined = userData.getUserByEmail(userInputData.email);
     if (userAlreadyExists) {
         return res.status(409).send("Email already in use.");
     }
@@ -62,14 +60,13 @@ app.post('/users/login', async (req: Request, res: Response) => {
     if (thereIsError) {
         return res.status(400).send(validationErrors);
     }
-    const currentUser: User | undefined = userData.getUserByEmail(userInputData.email);
-    const userDoesNotExists = !isUser(currentUser);
-    if (userDoesNotExists) {
+    const userDoesExists: User | undefined = userData.getUserByEmail(userInputData.email);
+    if (!userDoesExists) {
         return res.status(404).send("User does not exist.");
     }
 
     try {
-        if (await userActions.login(currentUser, userInputData.password)) {
+        if (await userActions.login(userDoesExists, userInputData.password)) {
             return res.status(200).send("Logged in successfully.");
         }
         return res.status(401).send("Incorrect password.");
