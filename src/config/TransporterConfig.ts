@@ -1,5 +1,4 @@
-import { Transporter } from "nodemailer";
-const nodemailer = require('nodemailer');
+import nodemailer, { Transporter } from "nodemailer"
 
 export class TransporterConfig {
     public transporter: Transporter;

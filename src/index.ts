@@ -4,18 +4,17 @@ import { bundleErrorsFromArray } from './utils/generalUtils'
 import { UserValidation } from './user/UserValidation';
 import { UserActions } from './user/UserActions';
 import { UserData } from './user/UserData';
-
-const express = require('express');
+import dotenv from 'dotenv'; dotenv.config();
+import express from 'express';
 const app: Express = express();
-require('dotenv').config();
 
+// Middleware
 app.use(express.json());
 
 const userData = new UserData;
 const userActions = new UserActions(userData);
 const userValidation = new UserValidation;
 
-//request users data for testing
 app.get('/users', (req: Request, res: Response) => {
     res.json(userData.users);
 })
@@ -39,7 +38,6 @@ app.post('/users/register', async (req: Request, res: Response) => {
 
     try {
         userActions.register({
-            id: Date.now(),
             email: userInputData.email,
             password: userInputData.password,
         });
