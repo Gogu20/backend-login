@@ -1,5 +1,5 @@
-const bcrypt = require('bcrypt');
-require('dotenv').config();
+import bcrypt from 'bcrypt';
+import dotenv from 'dotenv'; dotenv.config();
 
 
 export class HashingUtils {

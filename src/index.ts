@@ -1,6 +1,8 @@
+import "reflect-metadata";
+
 import { Express, Request, Response } from 'express';
-import { User, UserInput, ValidationResult } from './sharedTypes'
-import { bundleErrorsFromArray } from './utils/generalUtils'
+import { User, UserInput, ValidationResult } from './sharedTypes';
+import { bundleErrorsFromArray } from './utils/generalUtils';
 import { UserValidation } from './user/UserValidation';
 import { UserActions } from './user/UserActions';
 import { UserData } from './user/UserData';

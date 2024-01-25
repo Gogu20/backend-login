@@ -1,8 +1,57 @@
-import { Pool } from 'mysql2/typings/mysql/lib/Pool';
-import { connection } from './database/dbConfig';
-import { User } from './sharedTypes';
+import "reflect-metadata";
+import { AppDataSource } from './database/dbConfig';
+import { User } from './database/entities/User'
+import { } from 'typeorm';
 import dotenv from 'dotenv'; dotenv.config();
+import express, { Express, Router, Request, Response } from 'express';
+import { error } from "console";
+const app: Express = express();
+app.use(express.json());
 
+
+app.post('/test/user', async (req: Request, res: Response) => {
+    AppDataSource.initialize()
+        .then(async connection => {
+            console.log("Connected to mySQL server.");
+
+            const {
+                email,
+                password
+            } = req.body;
+
+            const user = User.create({
+                email: email,
+                password: password
+            });
+
+            await user.save()
+                .then(() => {
+                    console.log("User created successfully: ", res.json(user));
+                })
+                .catch((error) => {
+                    console.log("Unable to create user.");
+                    throw error;
+                })
+
+            await connection.destroy()
+                .then(() => {
+                    console.log("Connection to mySQL server closed.")
+                })
+                .catch((error) => {
+                    console.log("Unable to disconnect from mySQL server.");
+                    throw error;
+                })
+        })
+        .catch((error) => {
+            console.log("Unable to connect to mySQL server.");
+            throw error;
+        })
+})
+
+
+app.listen(1550, () => {
+    console.log(`Server running at localhost: 1550`);
+})
 
 /*const query = async (sqlQuery: string) => {
   pool.query(sqlQuery, (err: any, result: any) => {
@@ -53,7 +102,7 @@ async function fetchDataFromDatabase(query: string): Promise<any> {
 const selectQuery = 'SELECT * FROM Users';
 const result = await fetchDataFromDatabase(selectQuery);
 console.log(result);
-*/
+
 
 class UserService {
   private dbPool: any;
@@ -95,3 +144,4 @@ const closeMySqlConnectionawait = connection.end((error: Error) => {
 
   console.log('MySQL connection closed.');
 });
+*/

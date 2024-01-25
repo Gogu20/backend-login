@@ -1,7 +1,7 @@
 version: '3.8'
 services:
   api:
-    container_name: backend-login
+    container_name: app
     build: .
     volumes:
       - ./:/app
@@ -19,6 +19,6 @@ services:
     ports:
       - 3306:3306
     environment:
-      - MYSQL_ROOT_PASSWORD = root
+      - MYSQL_ROOT_PASSWORD=root
     env_file:
       - .env
