@@ -10,7 +10,8 @@ services:
       - 8080:8080
       - 1550:1550
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 
   db:
     container_name: database
@@ -23,3 +24,9 @@ services:
       - MYSQL_ROOT_PASSWORD=root
     env_file:
       - .env
+    healthcheck:
+      test: ["CMD", "curl", "-f", "db:3306"]
+      start_period: 10s
+      interval: 5s
+      timeout: 5s
+      retries: 10

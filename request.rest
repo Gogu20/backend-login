@@ -10,15 +10,6 @@ Content-Type: application/json
     "password": "password15"
 }
 
-###Register a test user at test port
-POST http://localhost:1550/test/user
-Content-Type: application/json
-
-{
-    "email": "cedez2",
-    "password": "looool"
-}
-
 ###Register a second user
 POST http://localhost:8080/users/register
 Content-Type: application/json

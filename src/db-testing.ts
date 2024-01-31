@@ -7,14 +7,9 @@ const app: Express = express();
 app.use(express.json());
 
 
-await AppDataSource.initialize()
-    .then(() => {
-        console.log("Connected to mySQL server.");
-    })
-    .catch((error) => {
-        console.log("Unable to connect to mySQL server.");
-        throw error;
-    })
+async function startConnection() {
+    
+} startConnection();
 
 app.post('/test/user', async (req: Request, res: Response) => {
     const userInput = {
@@ -28,7 +23,8 @@ app.post('/test/user', async (req: Request, res: Response) => {
 
     await user.save()
         .then(() => {
-            console.log("User created successfully: ", res.json(user));
+            console.log("User created successfully: ");
+            res.json(user);
         })
         .catch((error) => {
             console.log("Unable to create user.");

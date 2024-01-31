@@ -1,5 +1,5 @@
 import dotenv from 'dotenv'; dotenv.config();
-import { DataSource } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { User } from './entities/User';
 
 export const AppDataSource = new DataSource ({
@@ -13,4 +13,5 @@ export const AppDataSource = new DataSource ({
     synchronize: true
 })
 
+export const userRepository: Repository<User> = AppDataSource.getRepository(User);
 

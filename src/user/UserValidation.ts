@@ -1,5 +1,5 @@
 import { IUserValidation, UserInput, ValidationResult } from '../sharedTypes'
-import { capitalizeFirstLetter, processArrayIntoString} from '../utils/generalUtils'
+import { capitalizeFirstLetter, processArrayIntoString} from '../utils/formattingUtils'
 
 export class UserValidation implements IUserValidation {
 

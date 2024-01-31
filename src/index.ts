@@ -1,24 +1,26 @@
 import "reflect-metadata";
 
-import { Express, Request, Response } from 'express';
+import dotenv from 'dotenv'; 
+dotenv.config();
+
+import express, { Express, Request, Response } from 'express';
+const app: Express = express();
+
 import { IUser, UserInput, ValidationResult } from './sharedTypes';
-import { bundleErrorsFromArray } from './utils/generalUtils';
+import { AppDataSource } from "./database/dbConfig";
+import { bundleErrorsFromArray } from './utils/formattingUtils';
+import { getUserByEmail, getAllUsers } from './utils/queryUtils'
 import { UserValidation } from './user/UserValidation';
 import { UserActions } from './user/UserActions';
-import { UserData } from './user/UserData';
-import dotenv from 'dotenv'; dotenv.config();
-import express from 'express';
-const app: Express = express();
 
 // Middleware
 app.use(express.json());
 
-const userData = new UserData;
-const userActions = new UserActions(userData);
+const userActions = new UserActions;
 const userValidation = new UserValidation;
 
-app.get('/users', (req: Request, res: Response) => {
-    res.json(userData.users);
+app.get('/users', async (req: Request, res: Response) => {
+    res.json(await getAllUsers());
 })
 
 app.post('/users/register', async (req: Request, res: Response) => {
@@ -26,7 +28,7 @@ app.post('/users/register', async (req: Request, res: Response) => {
         email: req.body.email,
         password: req.body.password
     }
-    const userAlreadyExists: IUser | undefined = userData.getUserByEmail(userInputData.email);
+    const userAlreadyExists: IUser | null = await getUserByEmail(userInputData.email);
     if (userAlreadyExists) {
         return res.status(409).send("Email already in use.");
     }
@@ -60,7 +62,7 @@ app.post('/users/login', async (req: Request, res: Response) => {
     if (thereIsError) {
         return res.status(400).send(validationErrors);
     }
-    const userDoesExists: IUser | undefined = userData.getUserByEmail(userInputData.email);
+    const userDoesExists: IUser | null = await getUserByEmail(userInputData.email);
     if (!userDoesExists) {
         return res.status(404).send("User does not exist.");
     }
@@ -74,6 +76,15 @@ app.post('/users/login', async (req: Request, res: Response) => {
         res.status(500).send()
     }
 })
+
+await AppDataSource.initialize()
+    .then(() => {
+        console.log("Connected to mySQL server.");
+    })
+    .catch((error) => {
+        console.log("Unable to connect to mySQL server.");
+        throw error;
+    });
 
 app.listen(process.env.PORT, () => {
     console.log(`Server running at ${process.env.HOST}: ${process.env.PORT}`);

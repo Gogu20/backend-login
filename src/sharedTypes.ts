@@ -1,4 +1,7 @@
+import { User } from "./database/entities/User";
+
 export interface IUser {
+    id: number;
     email: string;
     password: string;
 }
@@ -7,7 +10,6 @@ export type UserInput = Omit<IUser, 'id'>;
 export interface IUserData {
     users: IUser[];
     addUser(user: IUser): void;
-    getUserByEmail(email: string): IUser | undefined;
 }
 
 export interface IUserActions {

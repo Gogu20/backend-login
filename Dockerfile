@@ -8,6 +8,6 @@ RUN npm install
 
 COPY . .
 
-EXPOSE 1550
+EXPOSE 8080
 
-CMD [ "npm", "run", "test-db" ]
+CMD [ "npm", "run", "start" ]
