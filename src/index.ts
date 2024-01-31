@@ -1,7 +1,7 @@
 import "reflect-metadata";
 
 import { Express, Request, Response } from 'express';
-import { User, UserInput, ValidationResult } from './sharedTypes';
+import { IUser, UserInput, ValidationResult } from './sharedTypes';
 import { bundleErrorsFromArray } from './utils/generalUtils';
 import { UserValidation } from './user/UserValidation';
 import { UserActions } from './user/UserActions';
@@ -26,7 +26,7 @@ app.post('/users/register', async (req: Request, res: Response) => {
         email: req.body.email,
         password: req.body.password
     }
-    const userAlreadyExists: User | undefined = userData.getUserByEmail(userInputData.email);
+    const userAlreadyExists: IUser | undefined = userData.getUserByEmail(userInputData.email);
     if (userAlreadyExists) {
         return res.status(409).send("Email already in use.");
     }
@@ -60,7 +60,7 @@ app.post('/users/login', async (req: Request, res: Response) => {
     if (thereIsError) {
         return res.status(400).send(validationErrors);
     }
-    const userDoesExists: User | undefined = userData.getUserByEmail(userInputData.email);
+    const userDoesExists: IUser | undefined = userData.getUserByEmail(userInputData.email);
     if (!userDoesExists) {
         return res.status(404).send("User does not exist.");
     }

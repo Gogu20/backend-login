@@ -1,50 +1,38 @@
 import "reflect-metadata";
 import { AppDataSource } from './database/dbConfig';
 import { User } from './database/entities/User'
-import { } from 'typeorm';
 import dotenv from 'dotenv'; dotenv.config();
 import express, { Express, Router, Request, Response } from 'express';
-import { error } from "console";
 const app: Express = express();
 app.use(express.json());
 
 
+await AppDataSource.initialize()
+    .then(() => {
+        console.log("Connected to mySQL server.");
+    })
+    .catch((error) => {
+        console.log("Unable to connect to mySQL server.");
+        throw error;
+    })
+
 app.post('/test/user', async (req: Request, res: Response) => {
-    AppDataSource.initialize()
-        .then(async connection => {
-            console.log("Connected to mySQL server.");
+    const userInput = {
+        email: req.body.email,
+        password: req.body.password
+    }
+    const user = User.create({
+        email: userInput.email,
+        password: userInput.password
+    });
 
-            const {
-                email,
-                password
-            } = req.body;
-
-            const user = User.create({
-                email: email,
-                password: password
-            });
-
-            await user.save()
-                .then(() => {
-                    console.log("User created successfully: ", res.json(user));
-                })
-                .catch((error) => {
-                    console.log("Unable to create user.");
-                    throw error;
-                })
-
-            await connection.destroy()
-                .then(() => {
-                    console.log("Connection to mySQL server closed.")
-                })
-                .catch((error) => {
-                    console.log("Unable to disconnect from mySQL server.");
-                    throw error;
-                })
+    await user.save()
+        .then(() => {
+            console.log("User created successfully: ", res.json(user));
         })
         .catch((error) => {
-            console.log("Unable to connect to mySQL server.");
-            throw error;
+            console.log("Unable to create user.");
+            console.error(error);
         })
 })
 

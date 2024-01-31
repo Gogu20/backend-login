@@ -1,9 +1,9 @@
-import { Entity, BaseEntity, Column, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, BaseEntity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('user')
 export class User extends BaseEntity {
     
-    @PrimaryGeneratedColumn()
+    @PrimaryGeneratedColumn('increment')
     id!: number;
     
     @Column('varchar', {

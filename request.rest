@@ -15,8 +15,8 @@ POST http://localhost:1550/test/user
 Content-Type: application/json
 
 {
-    "email": "cacat",
-    "password": "ca nu am validare oricum"
+    "email": "cedez2",
+    "password": "looool"
 }
 
 ###Register a second user
