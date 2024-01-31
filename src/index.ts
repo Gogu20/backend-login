@@ -80,12 +80,11 @@ app.post('/users/login', async (req: Request, res: Response) => {
 await AppDataSource.initialize()
     .then(() => {
         console.log("Connected to mySQL server.");
+        app.listen(process.env.PORT, () => {
+            console.log(`Server running at ${process.env.HOST}: ${process.env.PORT}`);
+        })
     })
     .catch((error) => {
         console.log("Unable to connect to mySQL server.");
         throw error;
     });
-
-app.listen(process.env.PORT, () => {
-    console.log(`Server running at ${process.env.HOST}: ${process.env.PORT}`);
-})
