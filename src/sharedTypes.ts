@@ -4,10 +4,11 @@ export interface IUser {
     password: string
 }
 
-export interface IUserData {
-    users: IUser[];
-    addUserToArray(user: IUser): Promise<void>;
-    getUserByEmailLocal(email: string): IUser | undefined;
+export interface UserDataProvider {
+    users?: IUser[];
+    addUser(user: IUser): Promise<void>;
+    getUsers(): Promise<IUser[]>;
+    getUserByEmail(email: string): Promise<IUser | null>;
 }
 
 export interface IUserActions {

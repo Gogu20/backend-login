@@ -6,31 +6,23 @@ dotenv.config();
 import express, { Express, Request, Response } from 'express';
 const app: Express = express();
 
-import toBoolean from "to-boolean";
-
 import { IUser, ValidationResult } from './sharedTypes';
-import { AppDataSource } from "./database/dbConfig";
+import { AppDataSource } from "./config/databaseConfig";
 import { bundleErrorsFromArray } from './utils/formattingUtils';
-import { getUserByEmailDatabase, getAllUsers } from './utils/queryUtils'
 import { UserValidation } from './user/UserValidation';
 import { UserActions } from './user/UserActions';
-import { UserData } from "./user/UserData";
+import { DatabaseUserProvider } from "./user/dataProviders/DatabaseUserProvider";
+import { LocalUserProvider } from "./user/dataProviders/LocalUserProvider";
 
 // Middleware
 app.use(express.json());
 
-const userData = new UserData;
+const userData = new DatabaseUserProvider;
 const userActions = new UserActions(userData);
 const userValidation = new UserValidation;
 
-const useDatabase: boolean = toBoolean(process.env.USE_DATABASE || 'true');
-
 app.get('/users', async (req: Request, res: Response) => {
-    if (useDatabase) {
-        res.json(await getAllUsers());
-    } else {
-        res.json(userData.users)
-    }
+    res.json(await userData.getUsers());
 })
 
 app.post('/users/register', async (req: Request, res: Response) => {
@@ -45,13 +37,8 @@ app.post('/users/register', async (req: Request, res: Response) => {
     if (thereIsError) {
         return res.status(400).send(validationErrors);
     }
-
-    let userExists: unknown;
-    if (useDatabase) {
-        userExists = await getUserByEmailDatabase(userInputData.email);
-    } else {
-        userExists = userData.getUserByEmailLocal(userInputData.email);
-    }
+    
+    const userExists: IUser | null = await userData.getUserByEmail(userInputData.email);
     if (userExists) {
         return res.status(409).send("Email already in use.");
     }
@@ -80,12 +67,7 @@ app.post('/users/login', async (req: Request, res: Response) => {
         return res.status(400).send(validationErrors);
     }
 
-    let userExists: unknown;
-    if (useDatabase) {
-        userExists = await getUserByEmailDatabase(userInputData.email);
-    } else {
-        userExists = userData.getUserByEmailLocal(userInputData.email);
-    }
+    const userExists: IUser | null = await userData.getUserByEmail(userInputData.email);
     if (!userExists) {
         return res.status(404).send("User does not exist.");
     }
