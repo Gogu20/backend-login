@@ -2,7 +2,7 @@ import { UserDataProvider, IUser } from '../../sharedTypes';
 
 export class LocalUserProvider implements UserDataProvider{
 
-    public users: IUser[] = [];
+    private users: IUser[] = [];
 
     public async addUser(user: IUser): Promise<void> {
         this.users.push(user)

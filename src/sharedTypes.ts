@@ -5,7 +5,6 @@ export interface IUser {
 }
 
 export interface UserDataProvider {
-    users?: IUser[];
     addUser(user: IUser): Promise<void>;
     getUsers(): Promise<IUser[]>;
     getUserByEmail(email: string): Promise<IUser | null>;
