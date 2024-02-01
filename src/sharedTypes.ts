@@ -7,6 +7,7 @@ export interface IUser {
 export interface IUserData {
     users: IUser[];
     addUserToArray(user: IUser): Promise<void>;
+    getUserByEmailLocal(email: string): IUser | undefined;
 }
 
 export interface IUserActions {
