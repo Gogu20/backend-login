@@ -1,7 +1,7 @@
 import { userRepository } from "../database/dbConfig";
 import { IUser } from "../sharedTypes";
 
-export async function getUserByEmail(email: string): Promise<IUser | null> {
+export async function getUserByEmailDatabase(email: string): Promise<IUser | null> {
     return userRepository.findOne({
         where: { email }
     });

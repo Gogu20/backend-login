@@ -1,8 +1,1 @@
 CREATE DATABASE BackendLogin;
-USE BackendLogin;
-
-CREATE TABLE Users (
-    id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    email VARCHAR(255) UNIQUE NOT NULL,
-    password TEXT NOT NULL
-);

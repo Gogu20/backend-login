@@ -6,31 +6,37 @@ dotenv.config();
 import express, { Express, Request, Response } from 'express';
 const app: Express = express();
 
-import { IUser, UserInput, ValidationResult } from './sharedTypes';
+import toBoolean from "to-boolean";
+
+import { IUser, ValidationResult } from './sharedTypes';
 import { AppDataSource } from "./database/dbConfig";
 import { bundleErrorsFromArray } from './utils/formattingUtils';
-import { getUserByEmail, getAllUsers } from './utils/queryUtils'
+import { getUserByEmailDatabase, getAllUsers } from './utils/queryUtils'
 import { UserValidation } from './user/UserValidation';
 import { UserActions } from './user/UserActions';
+import { UserData } from "./user/UserData";
 
 // Middleware
 app.use(express.json());
 
-const userActions = new UserActions;
+const userData = new UserData;
+const userActions = new UserActions(userData);
 const userValidation = new UserValidation;
 
+const useDatabase: boolean = toBoolean(process.env.USE_DATABASE || 'true');
+
 app.get('/users', async (req: Request, res: Response) => {
-    res.json(await getAllUsers());
+    if (useDatabase) {
+        res.json(await getAllUsers());
+    } else {
+        res.json(userData.users)
+    }
 })
 
 app.post('/users/register', async (req: Request, res: Response) => {
-    const userInputData: UserInput = {
+    const userInputData: IUser = {
         email: req.body.email,
         password: req.body.password
-    }
-    const userAlreadyExists: IUser | null = await getUserByEmail(userInputData.email);
-    if (userAlreadyExists) {
-        return res.status(409).send("Email already in use.");
     }
 
     const validationResults: ValidationResult = userValidation.registerValidation(userInputData);
@@ -38,6 +44,16 @@ app.post('/users/register', async (req: Request, res: Response) => {
     const thereIsError: boolean = !validationResults.success;
     if (thereIsError) {
         return res.status(400).send(validationErrors);
+    }
+
+    let userExists: unknown;
+    if (useDatabase) {
+        userExists = await getUserByEmailDatabase(userInputData.email);
+    } else {
+        userExists = userData.getUserByEmailLocal(userInputData.email);
+    }
+    if (userExists) {
+        return res.status(409).send("Email already in use.");
     }
 
     try {
@@ -52,23 +68,30 @@ app.post('/users/register', async (req: Request, res: Response) => {
 })
 
 app.post('/users/login', async (req: Request, res: Response) => {
-    const userInputData: UserInput = {
+    const userInputData: IUser = {
         email: req.body.email,
         password: req.body.password
     }
+
     const validationResults: ValidationResult = userValidation.loginValidation(userInputData);
     const validationErrors: string | undefined = bundleErrorsFromArray(validationResults.errors)
     const thereIsError: boolean = !validationResults.success;
     if (thereIsError) {
         return res.status(400).send(validationErrors);
     }
-    const userDoesExists: IUser | null = await getUserByEmail(userInputData.email);
-    if (!userDoesExists) {
+
+    let userExists: unknown;
+    if (useDatabase) {
+        userExists = await getUserByEmailDatabase(userInputData.email);
+    } else {
+        userExists = userData.getUserByEmailLocal(userInputData.email);
+    }
+    if (!userExists) {
         return res.status(404).send("User does not exist.");
     }
 
     try {
-        if (await userActions.login(userDoesExists, userInputData.password)) {
+        if (await userActions.login(userExists as IUser, userInputData.password)) {
             return res.status(200).send("Logged in successfully.");
         }
         return res.status(401).send("Incorrect password.");

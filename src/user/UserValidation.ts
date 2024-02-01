@@ -1,20 +1,20 @@
-import { IUserValidation, UserInput, ValidationResult } from '../sharedTypes'
+import { IUser, IUserValidation, ValidationResult } from '../sharedTypes'
 import { capitalizeFirstLetter, processArrayIntoString} from '../utils/formattingUtils'
 
 export class UserValidation implements IUserValidation {
 
-    private getEmptyFields(fields: UserInput): (keyof UserInput)[] {
-        const emptyFields: (keyof UserInput)[] = [];
+    private getEmptyFields(fields: IUser): (keyof IUser)[] {
+        const emptyFields: (keyof IUser)[] = [];
         for (const key in fields) {
-            const isEmpty = !fields[key as keyof UserInput].trim();
+            const isEmpty = !fields[key as keyof IUser].trim();
             if (isEmpty) {
-                emptyFields.push(key as keyof UserInput);
+                emptyFields.push(key as keyof IUser);
             }
         }
         return emptyFields;
     }
     
-    private thereAreEmptyFields(userInput: UserInput): boolean {
+    private thereAreEmptyFields(userInput: IUser): boolean {
         const emptyFields: string[] = this.getEmptyFields(userInput);
         const thereAreEmptyFields: boolean = emptyFields.length > 0;
         if (thereAreEmptyFields) {
@@ -23,7 +23,7 @@ export class UserValidation implements IUserValidation {
         return false;
     }
 
-    private allFieldsAreEmpty(userInput: UserInput): boolean {
+    private allFieldsAreEmpty(userInput: IUser): boolean {
         const emptyFields: string[] = this.getEmptyFields(userInput);
         const allFieldsAreEmpty: boolean = emptyFields.length === 2;
         if (allFieldsAreEmpty) {
@@ -42,7 +42,7 @@ export class UserValidation implements IUserValidation {
         return !passwordRegex.test(password);
     }
 
-    public registerValidation(userInput: UserInput): ValidationResult {
+    public registerValidation(userInput: IUser): ValidationResult {
         const errors: string[] = []
 
         const emptyFields: string[] = this.getEmptyFields(userInput);
@@ -77,7 +77,7 @@ export class UserValidation implements IUserValidation {
         return { success: true };
     }
 
-    public loginValidation(userInput: UserInput): ValidationResult {
+    public loginValidation(userInput: IUser): ValidationResult {
         const errors: string[] = []
         
         if (this.thereAreEmptyFields(userInput)) {
