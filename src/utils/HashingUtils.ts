@@ -16,8 +16,8 @@ export class HashingUtils {
     }
 
     public async generateHash(data: string): Promise<string> {
-        data = await bcrypt.hash(data, this.saltRounds);
-        return data;
+        const hashedData: string = await bcrypt.hash(data, this.saltRounds);
+        return hashedData;
     }
 
     public async compareDataWithHash(unhashedData: string, hashedData: string): Promise<boolean> {

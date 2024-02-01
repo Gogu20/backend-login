@@ -1,5 +1,7 @@
 import { Transporter, SentMessageInfo } from "nodemailer";
-import dotenv from 'dotenv'; dotenv.config();
+import { MailOptions } from "nodemailer/lib/json-transport";
+import dotenv from 'dotenv';
+dotenv.config();
 
 export class UserEmailConfirmation {
    
@@ -11,7 +13,7 @@ export class UserEmailConfirmation {
     
     public sendRegistrationEmail(email: string): void {
         
-        const mailOptions = {
+        const mailOptions: MailOptions = {
             from: process.env.ORG_EMAIL,
             to: email,
             subject: 'Registration Successful',

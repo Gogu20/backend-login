@@ -6,7 +6,7 @@ export class UserValidation implements IUserValidation {
     private getEmptyFields(fields: IUser): (keyof IUser)[] {
         const emptyFields: (keyof IUser)[] = [];
         for (const key in fields) {
-            const isEmpty = !fields[key as keyof IUser].trim();
+            const isEmpty: boolean = !fields[key as keyof IUser].trim();
             if (isEmpty) {
                 emptyFields.push(key as keyof IUser);
             }
@@ -61,13 +61,14 @@ export class UserValidation implements IUserValidation {
 
         const emailFieldNotEmpty: boolean = !emptyFields.includes("email");
         if (emailFieldNotEmpty && this.isInvalidEmail(userInput.email)) {
-            errors.push ("Invalid email.");
+            errors.push("Invalid email.");
         }
 
         const passwordFieldNotEmpty: boolean = !emptyFields.includes("password");
         if (passwordFieldNotEmpty && this.isInvalidPassword(userInput.password)) {
             errors.push("Password must contain at least 8 characters and at least one letter and one number.");
         }
+        
         if (errors.length > 0) {
             return {
                 success: false,

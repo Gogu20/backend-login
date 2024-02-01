@@ -6,7 +6,9 @@ import { IUserActions, IUserData, IUser } from '../sharedTypes'
 import { HashingUtils } from '../utils/HashingUtils';
 import { TransporterConfig } from '../config/TransporterConfig';
 import { UserEmailConfirmation } from './UserEmailConfirmation';
-import { userRepository } from '../database/dbConfig';
+import { getUserRepository } from '../utils/queryUtils';
+import { Repository } from 'typeorm';
+import { User } from '../database/entities/User';
 
 export class UserActions implements IUserActions{
     private useDatabase: boolean = toBoolean(process.env.USE_DATABASE || 'true');
@@ -21,16 +23,17 @@ export class UserActions implements IUserActions{
     private userConfirmation = new UserEmailConfirmation(this.transporterInstance.transporter);   
 
     public async register(userInput: IUser): Promise<void> {
-        const hashedPassword = await this.hashingUtils.generateHash(userInput.password);
+        const hashedPassword: string = await this.hashingUtils.generateHash(userInput.password);
         const user: IUser = { email: userInput.email, password: hashedPassword };
         
         if (this.useDatabase) {
-            const userData = userRepository.create(user);
+            const userRepository: Repository<User> = getUserRepository()
+            const userData: User = userRepository.create(user);
             await userData.save()
                 .then(() => {
                     console.log("User saved to database.");
                 })
-                .catch((error) => {
+                .catch((error: Error) => {
                     console.log("Unable to save user.");
                     console.error(error);
                 })
@@ -39,7 +42,7 @@ export class UserActions implements IUserActions{
                 .then(() => {
                     console.log("User saved to local storage");
                 })
-                .catch((error) => {
+                .catch((error: Error) => {
                     console.log("Unable to save user.");
                     console.error(error);
                 })
@@ -48,6 +51,6 @@ export class UserActions implements IUserActions{
     }
 
     public async login (user: IUser, password: string): Promise<boolean> {
-        return await this.hashingUtils.compareDataWithHash(password, user.password)
+        return await this.hashingUtils.compareDataWithHash(password, user.password);
     }
 }
