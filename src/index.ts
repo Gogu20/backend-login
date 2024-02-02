@@ -6,18 +6,18 @@ dotenv.config();
 import express, { Express, Request, Response } from 'express';
 const app: Express = express();
 
-import { IUser, ValidationResult } from './sharedTypes';
+import { IUser, UserDataProvider, ValidationResult } from './sharedTypes';
 import { AppDataSource } from "./config/databaseConfig";
 import { bundleErrorsFromArray } from './utils/formattingUtils';
 import { UserValidation } from './user/UserValidation';
 import { UserActions } from './user/UserActions';
-import { DatabaseUserProvider } from "./user/dataProviders/DatabaseUserProvider";
-import { LocalUserProvider } from "./user/dataProviders/LocalUserProvider";
+import { getUserDataProvider } from "./utils/getProvider";
+
 
 // Middleware
 app.use(express.json());
 
-const userData = new DatabaseUserProvider;
+const userData: UserDataProvider = getUserDataProvider();
 const userActions = new UserActions(userData);
 const userValidation = new UserValidation;
 

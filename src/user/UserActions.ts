@@ -28,7 +28,7 @@ export class UserActions implements IUserActions{
             .catch((error: Error) => {
                 console.log("Unable to save user.");
                 console.error(error);
-            })
+            });
 
         this.userConfirmation.sendRegistrationEmail(user.email);
     }

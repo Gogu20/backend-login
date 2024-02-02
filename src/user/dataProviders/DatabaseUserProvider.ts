@@ -6,13 +6,13 @@ import { User } from '../../entities/User';
 export class DatabaseUserProvider implements UserDataProvider{
     
     private getUserRepository(): Repository<User> {
-        return AppDataSource.getRepository(User);;
+        return AppDataSource.getRepository(User);
     }
     
     public async addUser(user: IUser): Promise<void> {
-        const userRepository: Repository<User> = this.getUserRepository()
+        const userRepository: Repository<User> = this.getUserRepository();
         const userData: User = userRepository.create(user);
-        await userData.save()
+        await userData.save();
     }
 
     public async getUsers(): Promise<IUser[]> {

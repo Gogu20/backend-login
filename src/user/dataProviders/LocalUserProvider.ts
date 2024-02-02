@@ -5,7 +5,7 @@ export class LocalUserProvider implements UserDataProvider{
     private users: IUser[] = [];
 
     public async addUser(user: IUser): Promise<void> {
-        this.users.push(user)
+        this.users.push(user);
     }
 
     public async getUsers(): Promise<IUser[]> {
