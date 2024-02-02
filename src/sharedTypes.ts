@@ -1,24 +1,23 @@
-export interface User {
-    id: number;
-    email: string;
-    password: string;
-}
-export type UserInput = Omit<User, 'id'>;
 
-export interface IUserData {
-    users: User[];
-    addUser(user: User): void;
-    getUserByEmail(email: string): User | undefined;
+export interface IUser {
+    email: string,
+    password: string
+}
+
+export interface UserDataProvider {
+    addUser(user: IUser): Promise<void>;
+    getUsers(): Promise<IUser[]>;
+    getUserByEmail(email: string): Promise<IUser | null>;
 }
 
 export interface IUserActions {
-    register(user: User): Promise<void>;
-    login(user: User, password: string): Promise<boolean>;
+    register(user: IUser): Promise<void>;
+    login(user: IUser, password: string): Promise<boolean>;
 }
 
 export interface IUserValidation {
-    registerValidation(userInput: UserInput): ValidationResult;
-    loginValidation(userInput: UserInput): ValidationResult;
+    registerValidation(userInput: IUser): ValidationResult;
+    loginValidation(userInput: IUser): ValidationResult;
 }
 
 export interface ValidationResult {

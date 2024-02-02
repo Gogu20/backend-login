@@ -1,10 +1,30 @@
 version: '3.8'
 services:
   api:
-    container_name: backend-login
+    container_name: app
     build: .
     volumes:
       - ./:/app
       - /app/node_modules
     ports:
       - 8080:8080
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    container_name: database
+    image: mysql:latest
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=BackendLogin
+    env_file:
+      - .env
+    healthcheck:
+      test: ["CMD", "curl", "-f", "db:3306"]
+      start_period: 10s
+      interval: 5s
+      timeout: 5s
+      retries: 10

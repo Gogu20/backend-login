@@ -1,14 +1,17 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
+    "module": "ES2022",
+    "target": "ES2022",
     "esModuleInterop": true,
     "strict": true,
-    "target": "es6",
+    "noImplicitAny": true,
     "moduleResolution": "node",
     "sourceMap": true,
     "outDir": "dist",
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "lib": [
       "DOM"
     ]
